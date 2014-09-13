@@ -14,9 +14,19 @@ namespace ShirenHUD
         static int RamBase = 0x7e0000;
         static int RamSize = 0x20000;
 
+        Process mProcess;
+        IntPtr mProcessPtr;
         byte[] mRam;
 
         public Snes()
+        {
+            mProcess = SearchProcess("snes9x.exe");
+            mProcessPtr = OpenProcess(ProcessAccessFlags.PROCESS_VM_READ, false, mProcess.Id);
+
+            updateMemory();
+        }
+
+        public void updateMemory()
         {
             mRam = ReadSnesRam();
         }
@@ -49,16 +59,12 @@ namespace ShirenHUD
             return (uint)(data[3] << 24 | data[2] << 16 | data[1] << 8 | data[0]);
         }
 
-        static byte[] ReadSnesRam()
+        byte[] ReadSnesRam()
         {
-            var process = SearchProcess("snes9x.exe");
-            IntPtr aPtr = OpenProcess(ProcessAccessFlags.PROCESS_VM_READ, false, process.Id);
-
             // Snes9X v1.53 (from MECC)
             // @$73815C,$2000,$306000
             // @$738154,$20000,$7E0000
-
-            byte[] data = ReadMemory(4, new IntPtr(0x738154), aPtr, process);
+            byte[] data = ReadMemory(4, new IntPtr(0x738154), mProcessPtr, mProcess);
             int baseAddress = (int)ToU32(data);
 
             /*
@@ -67,42 +73,11 @@ namespace ShirenHUD
 	                    $8000-$FFFF 	Extended RAM 	
                 $7F 	$0000-$FFFF 	Extended RAM
             */
-            data = ReadMemory(0x20000, new IntPtr(baseAddress), aPtr, process);
+            data = ReadMemory(0x20000, new IntPtr(baseAddress), mProcessPtr, mProcess);
             if (data == null)
                 MessageBox.Show("Can't read memory");
 
             return data;
-
-            /*
-                        int BlockSize = 1024 * 128;
-                        int offset = baseAddress;
-
-                        while (true)
-                        {
-                            data = ReadMemory(BlockSize, new IntPtr(offset), aPtr, process);
-                            if (data == null)
-                                break;
-
-                            for (int i = 0; i < BlockSize - 6; i++)
-                            {
-                                if (data[i] == 60 &&
-                                    data[i + 1] == 59 &&
-                                    data[i + 2] == 128 &&
-                                    data[i + 3] == 65 &&
-                                    data[i + 4] == 0 &&
-                                    data[i + 5] == 12)
-                                {
-                                    int addr = offset + i;
-                                    addr -= 0x25;
-                                    MessageBox.Show(string.Format("found! {0,0:X8}", addr));
-
-                                    // 33FAB31A
-                                }
-
-                                offset += BlockSize;
-                            }
-                        }
-            */
         }
 
         static Process SearchProcess(String pTargetExePath)
