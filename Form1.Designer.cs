@@ -32,6 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.hpTextBox = new System.Windows.Forms.TextBox();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
+            this.hintBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -53,14 +54,23 @@
             // updateTimer
             // 
             this.updateTimer.Enabled = true;
-            this.updateTimer.Interval = 500;
             this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
+            // 
+            // hintBox
+            // 
+            this.hintBox.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.hintBox.Location = new System.Drawing.Point(12, 31);
+            this.hintBox.Multiline = true;
+            this.hintBox.Name = "hintBox";
+            this.hintBox.Size = new System.Drawing.Size(533, 914);
+            this.hintBox.TabIndex = 2;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(557, 957);
+            this.Controls.Add(this.hintBox);
             this.Controls.Add(this.hpTextBox);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
@@ -75,6 +85,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox hpTextBox;
         private System.Windows.Forms.Timer updateTimer;
+        private System.Windows.Forms.TextBox hintBox;
     }
 }
 
