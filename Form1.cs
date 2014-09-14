@@ -20,6 +20,16 @@ namespace ShirenHUD
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
+            // 処理内でAssertしたとき、ダイアログが繰り返し開かないようにする
+            updateTimer.Enabled = false;
+            {
+                updateUI();
+            }
+            updateTimer.Enabled = true;
+        }
+
+        private void updateUI()
+        {
             mSnes.updateMemory();
             hpTextBox.Text = mSnes.U8(0x7E8604).ToString();
 
