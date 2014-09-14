@@ -20,10 +20,8 @@ namespace ShirenHUD
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
-            mSnes.updateMemory();
-            hpTextBox.Text = mSnes.U8(0x7E8604).ToString();
+            var snes = new Snes();
+            hpTextBox.Text = snes.U8(0x7E8604).ToString();
         }
-
-        Snes mSnes = new Snes();
     }
 }
