@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace ShirenHUD
 {
@@ -268,5 +269,66 @@ namespace ShirenHUD
             { 0xE6, "　　　　　　　　　　" }, // 草で、未識別の状態では飲めますが、識別すると透明で飲めなくなり、めぐすり草を飲んでも見えるようにはなりません。 
             { 0xE7, "ンドゥバ" },
         };
+
+        public static Item FromTable(Snes snes, int index)
+        {
+            Debug.Assert(index < 0x80);
+            int code = snes.U8(0x7E8B8C + index);
+
+            return new Item()
+            {
+                Valid = code != 0xFF,
+                Name = code != 0xFF ? Item.Names[code] : "",
+                InStore = snes.U8(0x7E8E8C + index) != 0,
+            };
+        }
+
+        public static Item FromShiren(Snes snes, int index)
+        {
+            Debug.Assert(index < 20);
+
+            var tableIndex = snes.U8(0x7E894F + index);
+            if (tableIndex == 0xFF)
+                return new Item() { Valid = false };
+
+            var item = Item.FromTable(snes, tableIndex);
+
+            // 壺の中のアイテムリスト
+            var nextIndex = tableIndex;
+            while(true)
+            {
+                nextIndex = snes.U8(0x7E8E0C + nextIndex);
+                if (nextIndex == 0xFF)
+                    break;
+
+                item.Contents.Add(Item.FromTable(snes, nextIndex));
+            }
+
+            return item;
+        }
+
+        public Item()
+        {
+            Contents = new List<Item>();
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                if (!Valid)
+                    return "";
+
+                string flags = "";
+                flags += InStore ? "商" : "";
+
+                return string.Format("{0} ({1})", Name, flags);
+            }
+        }
+
+        public bool Valid { get; set; }
+        public string Name { get; set; }
+        public bool InStore { get; set; }
+        public List<Item> Contents { get; set; }
     }
 }
