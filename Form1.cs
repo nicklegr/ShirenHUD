@@ -34,8 +34,26 @@ namespace ShirenHUD
             hint += string.Format("足下アイテム: {0}", itemIndex) + "\r\n";
 
             // 商品を拾った場合は即更新、置いた場合は店主に話しかけた時に更新
-            hint += string.Format("買値合計: {0}", mSnes.U16(0x7E8991)) + "\r\n";
+            hint += string.Format("買値合計: {0}", mSnes.U32(0x7E8991)) + "\r\n";
+
             // 売値合計
+            // 他の変数と共用らしく、店主に話しかけてる間だけ正しい値
+            hint += string.Format("売値合計: {0}", mSnes.U32(0x7E1FDB)) + "\r\n";
+
+            // 店内フラグ
+            // 検証甘め。中断時やセーブデータ選択画面では1になることがある。冒険中は今のところ合ってる
+            hint += string.Format("店内フラグ: {0} {1}", mSnes.U8(0x7E0CA4), mSnes.U8(0x7E0CB4)) + "\r\n";
+
+            hint += "所持アイテム\r\n";
+            for (int i = 0; i < 20; i++)
+            {
+                if (i == 10)
+                    hint += "\r\n";
+
+                var item = Item.FromShiren(mSnes, i);
+                hint += string.Format("{0:D2}: {1}\r\n", i, item.DisplayName);
+            }
+            hint += "\r\n";
 
             hint += "アイテムテーブル";
             for (int i = 0; i < 128; i++)
@@ -43,10 +61,8 @@ namespace ShirenHUD
                 if (i % 3 == 0)
                     hint += "\r\n";
 
-                int code = mSnes.U8(0x7E8B8C + i);
-                string name = code != 0xFF ? Item.Names[code] : "";
-                bool inStore = mSnes.U8(0x7E8E8C + i) != 0;
-                hint += string.Format("{0:D3}: {1:X2} {2} {3} / ", i, code, name, inStore ? "(商)" : "");
+                var item = Item.FromTable(mSnes, i);
+                hint += string.Format("{0:D3}: {1} / ", i, item.DisplayName);
             }
 
             hintBox.Text = hint;
