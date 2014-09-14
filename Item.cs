@@ -278,11 +278,12 @@ namespace ShirenHUD
             var item = new Item()
             {
                 Valid = code != 0xFF,
+                Code = code,
                 Name = code != 0xFF ? Item.Names[code] : "",
                 InStore = snes.U8(0x7E8E8C + index) != 0,
             };
 
-            if (item.Valid)
+            if (item.Valid && item.IsPot)
             {
                 // 壺の中のアイテムリスト
                 var nextIndex = index;
@@ -350,8 +351,10 @@ namespace ShirenHUD
         }
 
         public bool Valid { get; set; }
+        public int Code { get; set; }
         public string Name { get; set; }
         public bool InStore { get; set; }
         public List<Item> Contents { get; set; }
+        public bool IsPot { get { return 0xB4 <= Code && Code <= 0xC5; } }
     }
 }
