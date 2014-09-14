@@ -44,7 +44,7 @@ namespace ShirenHUD
             // 検証甘め。中断時やセーブデータ選択画面では1になることがある。冒険中は今のところ合ってる
             hint += string.Format("店内フラグ: {0} {1}", mSnes.U8(0x7E0CA4), mSnes.U8(0x7E0CB4)) + "\r\n";
 
-            hint += "所持アイテム\r\n";
+            hint += "所持アイテム:\r\n";
             for (int i = 0; i < 20; i++)
             {
                 if (i == 10)
@@ -53,9 +53,18 @@ namespace ShirenHUD
                 var item = Item.FromShiren(mSnes, i);
                 hint += string.Format("{0:D2}: {1}\r\n", i, item.DisplayName);
             }
-            hint += "\r\n";
 
-            hint += "アイテムテーブル";
+            var groundItem = Item.FromGround(mSnes);
+            if (groundItem.Valid && groundItem.Contents.Count != 0)
+            {
+                hint += "足下の壺の中身:\r\n";
+                foreach (var item in groundItem.Contents)
+                {
+                    hint += string.Format("  {0}\r\n", item.DisplayName);
+                }
+            }
+
+            hint += "アイテムテーブル:";
             for (int i = 0; i < 128; i++)
             {
                 if (i % 3 == 0)

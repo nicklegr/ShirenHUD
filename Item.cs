@@ -275,12 +275,28 @@ namespace ShirenHUD
             Debug.Assert(index < 0x80);
             int code = snes.U8(0x7E8B8C + index);
 
-            return new Item()
+            var item = new Item()
             {
                 Valid = code != 0xFF,
                 Name = code != 0xFF ? Item.Names[code] : "",
                 InStore = snes.U8(0x7E8E8C + index) != 0,
             };
+
+            if (item.Valid)
+            {
+                // 壺の中のアイテムリスト
+                var nextIndex = index;
+                while (true)
+                {
+                    nextIndex = snes.U8(0x7E8E0C + nextIndex);
+                    if (nextIndex == 0xFF)
+                        break;
+
+                    item.Contents.Add(Item.FromTable(snes, nextIndex));
+                }
+            }
+
+            return item;
         }
 
         public static Item FromShiren(Snes snes, int index)
@@ -289,22 +305,29 @@ namespace ShirenHUD
 
             var tableIndex = snes.U8(0x7E894F + index);
             if (tableIndex == 0xFF)
-                return new Item() { Valid = false };
+                return Item.Invalid();
 
-            var item = Item.FromTable(snes, tableIndex);
+            return Item.FromTable(snes, tableIndex);
+        }
 
-            // 壺の中のアイテムリスト
-            var nextIndex = tableIndex;
-            while(true)
-            {
-                nextIndex = snes.U8(0x7E8E0C + nextIndex);
-                if (nextIndex == 0xFF)
-                    break;
+        // 足下のアイテム
+        public static Item FromGround(Snes snes)
+        {
+            int shirenX = snes.U8(0x7E85C8);
+            int shirenY = snes.U8(0x7E85DC);
 
-                item.Contents.Add(Item.FromTable(snes, nextIndex));
-            }
+            int itemAddr = 0x7E9EDF + (shirenY * 0x40) + shirenX;
+            int itemIndex = snes.U8(itemAddr);
 
-            return item;
+            if (itemIndex < 0x80)
+                return Item.FromTable(snes, itemIndex);
+            else
+                return Item.Invalid();
+        }
+
+        public static Item Invalid()
+        {
+            return new Item() { Valid = false };
         }
 
         public Item()
