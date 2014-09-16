@@ -419,13 +419,15 @@ namespace ShirenHUD
                     case ItemType.Invalid:
                         break;
                     case ItemType.Sword:
-                        name = string.Format("{0}+{1}", Name, Attack);
+                        if(Attack != 0)
+                            name += Attack.ToString("+#;-#");
                         break;
                     case ItemType.Arrow:
                         name = string.Format("{0}本の{1}", ArrowCount, Name);
                         break;
                     case ItemType.Shield:
-                        name = string.Format("{0}+{1}", Name, Defense);
+                        if(Defense != 0)
+                            name += Defense.ToString("+#;-#");
                         break;
                     case ItemType.Grass:
                         break;
