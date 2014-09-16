@@ -15,6 +15,8 @@ namespace ShirenHUD
     {
         public Form1()
         {
+            Item.LoadItem();
+
             InitializeComponent();
         }
 
