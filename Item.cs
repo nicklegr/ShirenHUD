@@ -111,7 +111,7 @@ namespace ShirenHUD
                         break;
                     case ItemType.Pot:
                         {
-                            item.PotSize = snes.U8(0x7E8C8C + index);
+                            item.PotSizeLeft = snes.U8(0x7E8C8C + index);
 
                             // 壺の中のアイテムリスト
                             var nextIndex = index;
@@ -215,7 +215,7 @@ namespace ShirenHUD
                     case ItemType.RiceBall:
                         break;
                     case ItemType.Pot:
-                        name = string.Format("{0}[{1}]", Name, PotSize);
+                        name = string.Format("{0}[{1}]", Name, PotSizeLeft);
                         break;
                     case ItemType.Flower:
                         break;
@@ -274,7 +274,7 @@ namespace ShirenHUD
                     case ItemType.RiceBall:
                         break;
                     case ItemType.Pot:
-                        modify = PotSize;
+                        modify = PotSizeLeft + Contents.Count;
                         break;
                     case ItemType.Flower:
                         break;
@@ -325,7 +325,7 @@ namespace ShirenHUD
                     case ItemType.RiceBall:
                         break;
                     case ItemType.Pot:
-                        modify = PotSize;
+                        modify = PotSizeLeft + Contents.Count;
                         break;
                     case ItemType.Flower:
                         break;
@@ -354,7 +354,7 @@ namespace ShirenHUD
         public int Defense { get; set; } // 盾の補正値
         public int ArrowCount { get; set; } // 矢の本数
         public int WandLife { get; set; } // 杖の残り回数
-        public int PotSize { get; set; } // 壺のサイズ
+        public int PotSizeLeft { get; set; } // 壺の残りサイズ
         public int GitanAmount { get; set; } // ギタンの金額
         public bool InStore { get; set; }
         public List<Item> Contents { get; set; }
