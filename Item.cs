@@ -23,6 +23,7 @@ namespace ShirenHUD
             Flower,
             Meat,
             Event,
+            Gitan,
             Others,
         }
 
@@ -289,7 +290,7 @@ namespace ShirenHUD
             { 0xE4, new Data { Type = ItemType.Event, Name = "新規アイテム目的物" } },
 
             // その他
-            { 0xE5, new Data { Type = ItemType.Others, Name = "ギタン" } },
+            { 0xE5, new Data { Type = ItemType.Gitan, Name = "ギタン" } },
             { 0xE6, new Data { Type = ItemType.Others, Name = "　　　　　　　　　　" } }, // 草で、未識別の状態では飲めますが、識別すると透明で飲めなくなり、めぐすり草を飲んでも見えるようにはなりません。 
             { 0xE7, new Data { Type = ItemType.Others, Name = "ンドゥバ" } },
         };
@@ -318,6 +319,7 @@ namespace ShirenHUD
                         item.Attack = snes.U8(0x7E8C8C + index);
                         break;
                     case ItemType.Arrow:
+                        item.ArrowCount = snes.U8(0x7E8C8C + index);
                         break;
                     case ItemType.Shield:
                         item.Defense = snes.U8(0x7E8C8C + index);
@@ -327,6 +329,7 @@ namespace ShirenHUD
                     case ItemType.Scroll:
                         break;
                     case ItemType.Wand:
+                        item.WandLife = snes.U8(0x7E8C8C + index);
                         break;
                     case ItemType.Bracelet:
                         break;
@@ -334,6 +337,8 @@ namespace ShirenHUD
                         break;
                     case ItemType.Pot:
                         {
+                            item.PotSize = snes.U8(0x7E8C8C + index);
+
                             // 壺の中のアイテムリスト
                             var nextIndex = index;
                             while (true)
@@ -351,6 +356,9 @@ namespace ShirenHUD
                     case ItemType.Meat:
                         break;
                     case ItemType.Event:
+                        break;
+                    case ItemType.Gitan:
+                        item.GitanAmount = snes.U8(0x7E8D0C + index) << 8 | snes.U8(0x7E8C8C + index);
                         break;
                     case ItemType.Others:
                         break;
@@ -414,6 +422,7 @@ namespace ShirenHUD
                         name = string.Format("{0}+{1}", Name, Attack);
                         break;
                     case ItemType.Arrow:
+                        name = string.Format("{0}本の{1}", ArrowCount, Name);
                         break;
                     case ItemType.Shield:
                         name = string.Format("{0}+{1}", Name, Defense);
@@ -423,18 +432,23 @@ namespace ShirenHUD
                     case ItemType.Scroll:
                         break;
                     case ItemType.Wand:
+                        name = string.Format("{0}[{1}]", Name, WandLife);
                         break;
                     case ItemType.Bracelet:
                         break;
                     case ItemType.RiceBall:
                         break;
                     case ItemType.Pot:
+                        name = string.Format("{0}[{1}]", Name, PotSize);
                         break;
                     case ItemType.Flower:
                         break;
                     case ItemType.Meat:
                         break;
                     case ItemType.Event:
+                        break;
+                    case ItemType.Gitan:
+                        name = string.Format("{0}{1}", GitanAmount, Name);
                         break;
                     case ItemType.Others:
                         break;
@@ -453,8 +467,12 @@ namespace ShirenHUD
         public int Code { get; set; }
         public ItemType Type { get; set; }
         public string Name { get; set; }
-        public int Attack { get; set; }
-        public int Defense { get; set; }
+        public int Attack { get; set; } // 剣の補正値
+        public int Defense { get; set; } // 盾の補正値
+        public int ArrowCount { get; set; } // 矢の本数
+        public int WandLife { get; set; } // 杖の残り回数
+        public int PotSize { get; set; } // 壺のサイズ
+        public int GitanAmount { get; set; } // ギタンの金額
         public bool InStore { get; set; }
         public List<Item> Contents { get; set; }
     }
