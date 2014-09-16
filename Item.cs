@@ -31,27 +31,47 @@ namespace ShirenHUD
         {
             public ItemType Type { get; set; }
             public string Name { get; set; }
+            public int BaseBuyingPrice { get; set; }
+            public int BaseSellingPrice { get; set; }
+            public int ModifyBuyingPrice { get; set; }
+            public int ModifySellingPrice { get; set; }
         }
 
         static readonly Dictionary<int, Data> Names = new Dictionary<int, Data>()
         {
             // 武器
-            { 0x00, new Data { Type = ItemType.Sword, Name = "こん棒" } },
-            { 0x01, new Data { Type = ItemType.Sword, Name = "長巻" } },
-            { 0x02, new Data { Type = ItemType.Sword, Name = "ブフーの包丁" } },
-            { 0x03, new Data { Type = ItemType.Sword, Name = "カタナ" } },
-            { 0x04, new Data { Type = ItemType.Sword, Name = "ドラゴンキラー" } },
-            { 0x05, new Data { Type = ItemType.Sword, Name = "どうたぬき" } },
-            { 0x06, new Data { Type = ItemType.Sword, Name = "剛剣マンジカブラ" } },
-            { 0x07, new Data { Type = ItemType.Sword, Name = "成仏の鎌" } },
-            { 0x08, new Data { Type = ItemType.Sword, Name = "つるはし" } },
-            { 0x09, new Data { Type = ItemType.Sword, Name = "必中の剣" } },
-            { 0x0A, new Data { Type = ItemType.Sword, Name = "ミノタウロスの斧" } },
-            { 0x0B, new Data { Type = ItemType.Sword, Name = "妖刀かまいたち" } },
-            { 0x0C, new Data { Type = ItemType.Sword, Name = "１ツ目殺し" } },
-            { 0x0D, new Data { Type = ItemType.Sword, Name = "ドレインバスター" } },
-            { 0x0E, new Data { Type = ItemType.Sword, Name = "火迅風魔刀" } },
-            { 0x0F, new Data { Type = ItemType.Sword, Name = "秘剣カブラステギ" } },
+            { 0x00, new Data { Type = ItemType.Sword, Name = "こん棒",
+                BaseBuyingPrice = 240, BaseSellingPrice = 80, ModifyBuyingPrice = 24, ModifySellingPrice = 8, } },
+            { 0x01, new Data { Type = ItemType.Sword, Name = "長巻",
+                BaseBuyingPrice = 500, BaseSellingPrice = 200, ModifyBuyingPrice = 50, ModifySellingPrice = 20, } },
+            { 0x02, new Data { Type = ItemType.Sword, Name = "ブフーの包丁",
+                BaseBuyingPrice = 200, BaseSellingPrice = 800, ModifyBuyingPrice = 100, ModifySellingPrice = 55, } },
+            { 0x03, new Data { Type = ItemType.Sword, Name = "カタナ",
+                BaseBuyingPrice = 800, BaseSellingPrice = 300, ModifyBuyingPrice = 80, ModifySellingPrice = 30, } },
+            { 0x04, new Data { Type = ItemType.Sword, Name = "ドラゴンキラー",
+                BaseBuyingPrice = 3600, BaseSellingPrice = 1200, ModifyBuyingPrice = 310, ModifySellingPrice = 107, } },
+            { 0x05, new Data { Type = ItemType.Sword, Name = "どうたぬき",
+                BaseBuyingPrice = 1200, BaseSellingPrice = 400, ModifyBuyingPrice = 120, ModifySellingPrice = 40, } },
+            { 0x06, new Data { Type = ItemType.Sword, Name = "剛剣マンジカブラ",
+                BaseBuyingPrice = 15000, BaseSellingPrice = 7000, ModifyBuyingPrice = 1500, ModifySellingPrice = 700, } },
+            { 0x07, new Data { Type = ItemType.Sword, Name = "成仏の鎌",
+                BaseBuyingPrice = 2000, BaseSellingPrice = 900, ModifyBuyingPrice = 150, ModifySellingPrice = 75, } },
+            { 0x08, new Data { Type = ItemType.Sword, Name = "つるはし",
+                BaseBuyingPrice = 240, BaseSellingPrice = 100, ModifyBuyingPrice = 12, ModifySellingPrice = 7, } },
+            { 0x09, new Data { Type = ItemType.Sword, Name = "必中の剣",
+                BaseBuyingPrice = 10000, BaseSellingPrice = 5000, ModifyBuyingPrice = 900, ModifySellingPrice = 475, } },
+            { 0x0A, new Data { Type = ItemType.Sword, Name = "ミノタウロスの斧",
+                BaseBuyingPrice = 6000, BaseSellingPrice = 2400, ModifyBuyingPrice = 450, ModifySellingPrice = 200, } },
+            { 0x0B, new Data { Type = ItemType.Sword, Name = "妖刀かまいたち",
+                BaseBuyingPrice = 5000, BaseSellingPrice = 2000, ModifyBuyingPrice = 380, ModifySellingPrice = 170, } },
+            { 0x0C, new Data { Type = ItemType.Sword, Name = "１ツ目殺し",
+                BaseBuyingPrice = 3600, BaseSellingPrice = 1500, ModifyBuyingPrice = 260, ModifySellingPrice = 125, } },
+            { 0x0D, new Data { Type = ItemType.Sword, Name = "ドレインバスター",
+                BaseBuyingPrice = 4000, BaseSellingPrice = 1800, ModifyBuyingPrice = 320, ModifySellingPrice = 160, } },
+            { 0x0E, new Data { Type = ItemType.Sword, Name = "火迅風魔刀",
+                BaseBuyingPrice = 30000, BaseSellingPrice = 12500, ModifyBuyingPrice = 3000, ModifySellingPrice = 1250, } },
+            { 0x0F, new Data { Type = ItemType.Sword, Name = "秘剣カブラステギ",
+                BaseBuyingPrice = 40000, BaseSellingPrice = 17500, ModifyBuyingPrice = 4000, ModifySellingPrice = 1750, } },
 
             // 矢
             { 0x10, new Data { Type = ItemType.Arrow, Name = "木の矢" } },
@@ -304,6 +324,7 @@ namespace ShirenHUD
             {
                 Valid = code != 0xFF,
                 Code = code,
+                TableData = code != 0xFF ? Item.Names[code] : null,
                 Type = code != 0xFF ? Item.Names[code].Type : ItemType.Invalid,
                 Name = code != 0xFF ? Item.Names[code].Name : "",
                 InStore = snes.U8(0x7E8E8C + index) != 0,
@@ -459,14 +480,121 @@ namespace ShirenHUD
                 }
 
                 string flags = "";
+                flags += "買 " + BuyingPrice + "G";
+                flags += " ";
+                flags += "売 " + SellingPrice + "G";
+                flags += " ";
                 flags += InStore ? "商" : "";
 
                 return string.Format("{0} ({1})", name, flags);
             }
         }
 
+        public int BuyingPrice
+        {
+            get
+            {
+                int modify = 0;
+
+                switch (Type)
+                {
+                    case ItemType.Invalid:
+                        break;
+                    case ItemType.Sword:
+                        modify = Attack;
+                        break;
+                    case ItemType.Arrow:
+                        modify = ArrowCount;
+                        break;
+                    case ItemType.Shield:
+                        modify = Defense;
+                        break;
+                    case ItemType.Grass:
+                        break;
+                    case ItemType.Scroll:
+                        break;
+                    case ItemType.Wand:
+                        modify = WandLife;
+                        break;
+                    case ItemType.Bracelet:
+                        break;
+                    case ItemType.RiceBall:
+                        break;
+                    case ItemType.Pot:
+                        modify = PotSize;
+                        break;
+                    case ItemType.Flower:
+                        break;
+                    case ItemType.Meat:
+                        break;
+                    case ItemType.Event:
+                        break;
+                    case ItemType.Gitan:
+                        break;
+                    case ItemType.Others:
+                        break;
+                    default:
+                        break;
+                }
+
+                return TableData.BaseBuyingPrice + TableData.ModifyBuyingPrice * modify;
+            }
+        }
+
+        public int SellingPrice
+        {
+            get
+            {
+                int modify = 0;
+
+                switch (Type)
+                {
+                    case ItemType.Invalid:
+                        break;
+                    case ItemType.Sword:
+                        modify = Attack;
+                        break;
+                    case ItemType.Arrow:
+                        modify = ArrowCount;
+                        break;
+                    case ItemType.Shield:
+                        modify = Defense;
+                        break;
+                    case ItemType.Grass:
+                        break;
+                    case ItemType.Scroll:
+                        break;
+                    case ItemType.Wand:
+                        modify = WandLife;
+                        break;
+                    case ItemType.Bracelet:
+                        break;
+                    case ItemType.RiceBall:
+                        break;
+                    case ItemType.Pot:
+                        modify = PotSize;
+                        break;
+                    case ItemType.Flower:
+                        break;
+                    case ItemType.Meat:
+                        break;
+                    case ItemType.Event:
+                        break;
+                    case ItemType.Gitan:
+                        break;
+                    case ItemType.Others:
+                        break;
+                    default:
+                        break;
+                }
+
+                return TableData.BaseSellingPrice + TableData.ModifySellingPrice * modify;
+            }
+        }
+
         public bool Valid { get; set; }
         public int Code { get; set; }
+        Data TableData { get; set; }
         public ItemType Type { get; set; }
         public string Name { get; set; }
         public int Attack { get; set; } // 剣の補正値
