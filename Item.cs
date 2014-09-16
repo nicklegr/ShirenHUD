@@ -308,17 +308,54 @@ namespace ShirenHUD
                 InStore = snes.U8(0x7E8E8C + index) != 0,
             };
 
-            if (item.Valid && item.Type == ItemType.Pot)
+            if (item.Valid)
             {
-                // 壺の中のアイテムリスト
-                var nextIndex = index;
-                while (true)
+                switch (item.Type)
                 {
-                    nextIndex = snes.U8(0x7E8E0C + nextIndex);
-                    if (nextIndex == 0xFF)
+                    case ItemType.Invalid:
                         break;
+                    case ItemType.Sword:
+                        item.Attack = snes.U8(0x7E8C8C + index);
+                        break;
+                    case ItemType.Arrow:
+                        break;
+                    case ItemType.Shield:
+                        item.Defense = snes.U8(0x7E8C8C + index);
+                        break;
+                    case ItemType.Grass:
+                        break;
+                    case ItemType.Scroll:
+                        break;
+                    case ItemType.Wand:
+                        break;
+                    case ItemType.Bracelet:
+                        break;
+                    case ItemType.RiceBall:
+                        break;
+                    case ItemType.Pot:
+                        {
+                            // 壺の中のアイテムリスト
+                            var nextIndex = index;
+                            while (true)
+                            {
+                                nextIndex = snes.U8(0x7E8E0C + nextIndex);
+                                if (nextIndex == 0xFF)
+                                    break;
 
-                    item.Contents.Add(Item.FromTable(snes, nextIndex));
+                                item.Contents.Add(Item.FromTable(snes, nextIndex));
+                            }
+                        }
+                        break;
+                    case ItemType.Flower:
+                        break;
+                    case ItemType.Meat:
+                        break;
+                    case ItemType.Event:
+                        break;
+                    case ItemType.Others:
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -368,10 +405,47 @@ namespace ShirenHUD
                 if (!Valid)
                     return "";
 
+                string name = Name;
+                switch (Type)
+                {
+                    case ItemType.Invalid:
+                        break;
+                    case ItemType.Sword:
+                        name = string.Format("{0}+{1}", Name, Attack);
+                        break;
+                    case ItemType.Arrow:
+                        break;
+                    case ItemType.Shield:
+                        name = string.Format("{0}+{1}", Name, Defense);
+                        break;
+                    case ItemType.Grass:
+                        break;
+                    case ItemType.Scroll:
+                        break;
+                    case ItemType.Wand:
+                        break;
+                    case ItemType.Bracelet:
+                        break;
+                    case ItemType.RiceBall:
+                        break;
+                    case ItemType.Pot:
+                        break;
+                    case ItemType.Flower:
+                        break;
+                    case ItemType.Meat:
+                        break;
+                    case ItemType.Event:
+                        break;
+                    case ItemType.Others:
+                        break;
+                    default:
+                        break;
+                }
+
                 string flags = "";
                 flags += InStore ? "商" : "";
 
-                return string.Format("{0} ({1})", Name, flags);
+                return string.Format("{0} ({1})", name, flags);
             }
         }
 
@@ -379,6 +453,8 @@ namespace ShirenHUD
         public int Code { get; set; }
         public ItemType Type { get; set; }
         public string Name { get; set; }
+        public int Attack { get; set; }
+        public int Defense { get; set; }
         public bool InStore { get; set; }
         public List<Item> Contents { get; set; }
     }
