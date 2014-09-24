@@ -43,7 +43,7 @@ namespace ShirenHUD
 
             int itemAddr = 0x7E9EDF + (shirenY * 0x40) + shirenX;
             int itemIndex = mSnes.U8(itemAddr);
-            hint += string.Format("足下アイテム: {0}", itemIndex) + "\r\n";
+            hint += string.Format("足下アイテム: {0}: {1}", itemIndex, Item.FromGround(mSnes).DisplayName) + "\r\n";
 
             // 商品を拾った場合は即更新、置いた場合は店主に話しかけた時に更新
             hint += string.Format("買値合計: {0}", mSnes.U32(0x7E8991)) + "\r\n";
@@ -88,19 +88,19 @@ namespace ShirenHUD
                 }
                 else
                 {
-                int buyingPrice = groundItem.BuyingPrice;
-                hint += string.Format("買値{0}Gの{1}:\r\n", buyingPrice, groundItem.TypeName);
-                foreach (var item in Item.AllPossible())
-                {
-                    if (item.Type != groundItem.Type)
-                        continue;
+                    int buyingPrice = groundItem.BuyingPrice;
+                    hint += string.Format("買値{0}Gの{1}:\r\n", buyingPrice, groundItem.TypeName);
+                    foreach (var item in Item.AllPossible())
+                    {
+                        if (item.Type != groundItem.Type)
+                            continue;
 
-                    if (item.BuyingPrice != buyingPrice)
-                        continue;
+                        if (item.BuyingPrice != buyingPrice)
+                            continue;
 
-                    hint += string.Format("  {0}\r\n", item.DisplayName);
+                        hint += string.Format("  {0}\r\n", item.DisplayName);
+                    }
                 }
-            }
             }
 
             hint += "アイテムテーブル:";
