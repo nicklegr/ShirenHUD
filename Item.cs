@@ -109,13 +109,13 @@ namespace ShirenHUD
                     case ItemType.Invalid:
                         break;
                     case ItemType.Sword:
-                        item.Attack = snes.U8(0x7E8C8C + index);
+                        item.Attack = snes.S8(0x7E8C8C + index);
                         break;
                     case ItemType.Arrow:
                         item.ArrowCount = snes.U8(0x7E8C8C + index);
                         break;
                     case ItemType.Shield:
-                        item.Defense = snes.U8(0x7E8C8C + index);
+                        item.Defense = snes.S8(0x7E8C8C + index);
                         break;
                     case ItemType.Grass:
                         break;

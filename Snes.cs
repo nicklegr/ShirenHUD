@@ -37,6 +37,12 @@ namespace ShirenHUD
             return mRam[addr - RamBase];
         }
 
+        public sbyte S8(int addr)
+        {
+            Debug.Assert(RamBase <= addr && addr < RamBase + RamSize);
+            return (sbyte)mRam[addr - RamBase];
+        }
+
         public ushort U16(int addr)
         {
             Debug.Assert(RamBase <= addr && addr < RamBase + RamSize - 1);
