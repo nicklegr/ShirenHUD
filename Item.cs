@@ -28,6 +28,25 @@ namespace ShirenHUD
             Others,
         }
 
+        static readonly Dictionary<ItemType, string> TypeNames = new Dictionary<ItemType, string>()
+        {
+            { ItemType.Invalid, "" },
+            { ItemType.Sword, "剣" },
+            { ItemType.Arrow, "矢" },
+            { ItemType.Shield, "盾" },
+            { ItemType.Grass, "草" },
+            { ItemType.Scroll, "巻物" },
+            { ItemType.Wand, "杖" },
+            { ItemType.Bracelet, "腕輪" },
+            { ItemType.RiceBall, "おにぎり" },
+            { ItemType.Pot, "壺" },
+            { ItemType.Flower, "" },
+            { ItemType.Meat, "肉" },
+            { ItemType.Event, "" },
+            { ItemType.Gitan, "ギタン" },
+            { ItemType.Others, "" },
+        };
+
         class Data
         {
             public ItemType Type { get; set; }
@@ -425,6 +444,14 @@ namespace ShirenHUD
                 }
 
                 return TableData.BaseSellingPrice + TableData.ModifySellingPrice * modify;
+            }
+        }
+
+        public string TypeName
+        {
+            get
+            {
+                return TypeNames[Type];
             }
         }
 

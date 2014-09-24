@@ -76,15 +76,21 @@ namespace ShirenHUD
                 }
             }
 
+            // 買値識別
             // @todo 売ろうとしているアイテムにもフラグが立つことに注意。足下のアイテムの買値が売る前にわかってしまう
             if (groundItem.Valid && groundItem.InStore)
             {
                 int buyingPrice = groundItem.BuyingPrice;
-                hint += string.Format("買値{0}Gのアイテム:\r\n", buyingPrice);
+                hint += string.Format("買値{0}Gの{1}:\r\n", buyingPrice, groundItem.TypeName);
                 foreach (var item in Item.AllPossible())
                 {
-                    if(item.BuyingPrice == buyingPrice)
-                        hint += string.Format("  {0}\r\n", item.DisplayName);
+                    if (item.Type != groundItem.Type)
+                        continue;
+
+                    if (item.BuyingPrice != buyingPrice)
+                        continue;
+
+                    hint += string.Format("  {0}\r\n", item.DisplayName);
                 }
             }
 
