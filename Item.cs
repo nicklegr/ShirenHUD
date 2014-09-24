@@ -170,6 +170,89 @@ namespace ShirenHUD
                 return Item.Invalid();
         }
 
+        // 自然に落ちてる可能性がある全アイテムの種類
+        public static IEnumerable<Item> AllPossible()
+        {
+            foreach (var data in Names)
+            {
+                var item = new Item()
+                {
+                    Valid = true,
+                    Code = data.Key,
+                    TableData = data.Value,
+                    Type = data.Value.Type,
+                    Name = data.Value.Name,
+                };
+
+                switch (item.Type)
+                {
+                    case ItemType.Invalid:
+                        break;
+                    case ItemType.Sword:
+                        for (int i = -1; i <= 3; i++)
+                        {
+                            var newItem = (Item)item.MemberwiseClone();
+                            newItem.Attack = i;
+                            yield return newItem;
+                        }
+                        break;
+                    case ItemType.Arrow:
+                        // @todo 必要？
+                        break;
+                    case ItemType.Shield:
+                        for (int i = -1; i <= 3; i++)
+                        {
+                            var newItem = (Item)item.MemberwiseClone();
+                            newItem.Defense = i;
+                            yield return newItem;
+                        }
+                        break;
+                    case ItemType.Grass:
+                        yield return item;
+                        break;
+                    case ItemType.Scroll:
+                        yield return item;
+                        break;
+                    case ItemType.Wand:
+                        for (int i = 5; i <= 8; i++) // 8があり得るのは封印の杖のみらしい
+                        {
+                            var newItem = (Item)item.MemberwiseClone();
+                            newItem.WandLife = i;
+                            yield return newItem;
+                        }
+                        break;
+                    case ItemType.Bracelet:
+                        yield return item;
+                        break;
+                    case ItemType.RiceBall:
+                        yield return item;
+                        break;
+                    case ItemType.Pot:
+                        for (int i = 3; i <= 6; i++)
+                        {
+                            var newItem = (Item)item.MemberwiseClone();
+                            newItem.PotSizeLeft = i;
+                            yield return newItem;
+                        }
+                        break;
+                    case ItemType.Flower:
+                        break;
+                    case ItemType.Meat:
+                        // @todo
+                        break;
+                    case ItemType.Event:
+                        break;
+                    case ItemType.Gitan:
+                        break;
+                    case ItemType.Others:
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+
         public static Item Invalid()
         {
             return new Item() { Valid = false };

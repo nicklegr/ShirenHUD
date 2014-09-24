@@ -76,6 +76,18 @@ namespace ShirenHUD
                 }
             }
 
+            // @todo 売ろうとしているアイテムにもフラグが立つことに注意。足下のアイテムの買値が売る前にわかってしまう
+            if (groundItem.Valid && groundItem.InStore)
+            {
+                int buyingPrice = groundItem.BuyingPrice;
+                hint += string.Format("買値{0}Gのアイテム:\r\n", buyingPrice);
+                foreach (var item in Item.AllPossible())
+                {
+                    if(item.BuyingPrice == buyingPrice)
+                        hint += string.Format("  {0}\r\n", item.DisplayName);
+                }
+            }
+
             hint += "アイテムテーブル:";
             for (int i = 0; i < 128; i++)
             {
