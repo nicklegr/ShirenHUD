@@ -376,7 +376,7 @@ namespace ShirenHUD
                     case ItemType.RiceBall:
                         break;
                     case ItemType.Pot:
-                        modify = PotSizeLeft + Contents.Count;
+                        modify = PotSizeLeft;
                         break;
                     case ItemType.Flower:
                         break;
@@ -427,7 +427,7 @@ namespace ShirenHUD
                     case ItemType.RiceBall:
                         break;
                     case ItemType.Pot:
-                        modify = PotSizeLeft + Contents.Count;
+                        modify = PotSizeLeft;
                         break;
                     case ItemType.Flower:
                         break;

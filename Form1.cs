@@ -77,6 +77,7 @@ namespace ShirenHUD
             }
 
             // 買値識別
+            // 7E8991の請求金額は、杖や壺を使用した場合の価格が加算されるので注意。そのためそちらは見ない。
             // @todo 売ろうとしているアイテムにもフラグが立つことに注意。足下のアイテムの買値が売る前にわかってしまう
             if (groundItem.Valid && groundItem.InStore)
             {
